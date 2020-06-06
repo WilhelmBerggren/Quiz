@@ -1,34 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import authService from './api-authorization/AuthorizeService'
-
-export const Highscore = () => {
-    const [data, setData] = useState({scores: [], loading: true});
-    
-    useEffect(() => {
-        async function fetchData() {
-            const token = await authService.getAccessToken();
-            const response = await fetch('api/ScoreItems', {
-                headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
-              });
-            const data = await response.json();
-            setData({ scores: data, loading: false });
-        }
-        fetchData();
-    }, []);
-
-    return (
-        <>
-            <h3>Highscore:</h3>
-            {!data.loading && data.scores.map(s => (
-                <>
-                    <h3>{s.user}: {s.score}</h3>
-                </>
-            ))}
-        </>
-    );
-}
-
-
+import { Highscore } from './Highscore';
 
 export const Game = () => {
     const [data, setData] = useState({questions: [], loading: true});
@@ -37,9 +9,9 @@ export const Game = () => {
     const [gameOver, setGameOver] = useState(false);
 
     const PostScore = async (score) => {
+        if(score == 0) return;
         const token = await authService.getAccessToken();
         const user = await authService.getUser();
-        console.log(user);
         await fetch('api/ScoreItems',
         {
             headers: !token ? {} : { 
@@ -67,7 +39,10 @@ export const Game = () => {
                 headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
               });
             const data = await response.json();
-            setData({ questions: data.sort((a,b) => 0,5 - Math.random()), loading: false });
+            const sorted = data.sort((a,b) => 0.5 - Math.random());
+            console.log(data);
+            console.log(sorted);
+            setData({ questions: sorted, loading: false });
         }
         fetchData();
     }, []);
@@ -89,13 +64,14 @@ export const Game = () => {
                     <h3>Question: {progress} / {data.questions.length} </h3>
                 </>
             )}
-            {data.questions.length < progress && (
+            {!data.loading && (data.questions.length < progress) && (
                 <>
                     <h3>
                         Thanks for playing!
                     </h3>
                     <Highscore />
                     <p>Score: {score}</p>
+                    <button onClick={() => setProgress(null)}>Restart</button>
                 </>
             )}
 
@@ -104,8 +80,8 @@ export const Game = () => {
 }
 
 const Question = ({question, answer}) => {
-    const options = [answer.answer, answer.option1, answer.option2].sort((a, b) => 0.5 - Math.random());
-    const renderOption = (correct, answer) => <button onClick={() => answer(correct)}>{answer}</button>
+    const options = [question.answer, question.option1, question.option2].sort((a, b) => 0.5 - Math.random());
+    const renderOption = (correct, title) => <button key={title} onClick={() => answer(correct)}>{title}</button>
     return (
         <div id="question">
             <h3>{question.title}</h3>

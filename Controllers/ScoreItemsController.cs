@@ -45,41 +45,13 @@ namespace Quiz.Controllers
         }
 
         // PUT: api/ScoreItems/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutScoreItem(int id, ScoreItem scoreItem)
+        public IActionResult PutScoreItem(int id, ScoreItem scoreItem)
         {
-            if (id != scoreItem.Id)
-            {
-                return BadRequest();
-            }
-
-            
-            _context.Entry(scoreItem).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ScoreItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Forbid();
         }
 
         // POST: api/ScoreItems
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<ScoreItem>> PostScoreItem(ScoreItem scoreItem)
         {
@@ -93,23 +65,9 @@ namespace Quiz.Controllers
 
         // DELETE: api/ScoreItems/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ScoreItem>> DeleteScoreItem(int id)
+        public ActionResult<ScoreItem> DeleteScoreItem(int id)
         {
-            var scoreItem = await _context.ScoreItems.FindAsync(id);
-            if (scoreItem == null)
-            {
-                return NotFound();
-            }
-
-            _context.ScoreItems.Remove(scoreItem);
-            await _context.SaveChangesAsync();
-
-            return scoreItem;
-        }
-
-        private bool ScoreItemExists(int id)
-        {
-            return _context.ScoreItems.Any(e => e.Id == id);
+            return Forbid();
         }
     }
 }
