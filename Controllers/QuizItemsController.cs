@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Quiz.Data;
 using Quiz.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Quiz.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class QuizItemsController : ControllerBase

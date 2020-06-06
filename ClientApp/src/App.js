@@ -5,7 +5,7 @@ import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
 import { Questions } from './components/Questions';
 import { Counter } from './components/Counter';
-import { Game } from './components/Game';
+import { Game, Highscore } from './components/Game';
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
@@ -19,10 +19,9 @@ export default class App extends Component {
     return (
       <Layout>
         <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/game' component={Game} />
+        <AuthorizeRoute path='/game' component={Game} />
+        <AuthorizeRoute path='/highscore' component={Highscore} />
         <AuthorizeRoute path='/fetch-data' component={FetchData} />
-        <Route path='/questions' component={Questions} />
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
       </Layout>
     );

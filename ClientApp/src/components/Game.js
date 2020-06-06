@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import authService from './api-authorization/AuthorizeService'
 
 export const Highscore = () => {
     const [data, setData] = useState({scores: [], loading: true});
@@ -36,7 +37,10 @@ export const Game = () => {
 
     useEffect(() => {
         async function fetchData() {
-            const response = await fetch('api/QuizItems');
+            const token = await authService.getAccessToken();
+            const response = await fetch('api/QuizItems', {
+                headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+              });
             const data = await response.json();
             setData({ questions: data, loading: false });
         }
