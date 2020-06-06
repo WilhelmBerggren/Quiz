@@ -8,7 +8,13 @@ export const Game = () => {
     const [score, setScore] = useState(0);
     const [gameOver, setGameOver] = useState(false);
 
-    const PostScore = async (score) => {
+    const restart = () => {
+        setScore(0);
+        setProgress(null);
+        setGameOver(false);
+    }
+
+    const postScore = async (score) => {
         if(score == 0) return;
         const token = await authService.getAccessToken();
         const user = await authService.getUser();
@@ -48,7 +54,7 @@ export const Game = () => {
     }, []);
 
     if(!gameOver && data.questions.length < progress){
-        PostScore(score)
+        postScore(score)
     }
     return (
         <>
@@ -71,7 +77,7 @@ export const Game = () => {
                     </h3>
                     <Highscore />
                     <p>Score: {score}</p>
-                    <button onClick={() => setProgress(null)}>Restart</button>
+                    <button onClick={() => restart()}>Restart</button>
                 </>
             )}
 
