@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Quiz.Data;
 using Quiz.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Quiz.Controllers
 {
@@ -17,6 +18,7 @@ namespace Quiz.Controllers
     public class QuizItemsController : ControllerBase
     {
         private readonly QuizContext _context;
+        private UserManager<IdentityUser> _manager;
 
         public QuizItemsController(QuizContext context)
         {

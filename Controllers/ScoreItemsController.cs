@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Quiz.Models;
 
 namespace Quiz.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ScoreItemsController : ControllerBase
@@ -25,14 +27,14 @@ namespace Quiz.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ScoreItem>>> GetScoreItem()
         {
-            return await _context.ScoreItem.ToListAsync();
+            return await _context.ScoreItems.ToListAsync();
         }
 
         // GET: api/ScoreItems/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ScoreItem>> GetScoreItem(int id)
         {
-            var scoreItem = await _context.ScoreItem.FindAsync(id);
+            var scoreItem = await _context.ScoreItems.FindAsync(id);
 
             if (scoreItem == null)
             {
@@ -53,6 +55,7 @@ namespace Quiz.Controllers
                 return BadRequest();
             }
 
+            
             _context.Entry(scoreItem).State = EntityState.Modified;
 
             try
@@ -80,7 +83,9 @@ namespace Quiz.Controllers
         [HttpPost]
         public async Task<ActionResult<ScoreItem>> PostScoreItem(ScoreItem scoreItem)
         {
-            _context.ScoreItem.Add(scoreItem);
+            scoreItem.Date = DateTime.Now;
+
+            _context.ScoreItems.Add(scoreItem);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetScoreItem", new { id = scoreItem.Id }, scoreItem);
@@ -90,13 +95,13 @@ namespace Quiz.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<ScoreItem>> DeleteScoreItem(int id)
         {
-            var scoreItem = await _context.ScoreItem.FindAsync(id);
+            var scoreItem = await _context.ScoreItems.FindAsync(id);
             if (scoreItem == null)
             {
                 return NotFound();
             }
 
-            _context.ScoreItem.Remove(scoreItem);
+            _context.ScoreItems.Remove(scoreItem);
             await _context.SaveChangesAsync();
 
             return scoreItem;
@@ -104,7 +109,7 @@ namespace Quiz.Controllers
 
         private bool ScoreItemExists(int id)
         {
-            return _context.ScoreItem.Any(e => e.Id == id);
+            return _context.ScoreItems.Any(e => e.Id == id);
         }
     }
 }

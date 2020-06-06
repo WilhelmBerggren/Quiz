@@ -16,7 +16,7 @@ namespace Quiz.Data
 
         public DbSet<QuizItem> QuizItems { get; set; }
 
-        public DbSet<Quiz.Models.ScoreItem> ScoreItem { get; set; }
+        public DbSet<Quiz.Models.ScoreItem> ScoreItems { get; set; }
 
     }
 }

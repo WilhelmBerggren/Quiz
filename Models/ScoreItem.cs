@@ -8,7 +8,13 @@ namespace Quiz.Models
     public class ScoreItem
     {
         public int Id { get; set; }
-        public ApplicationUser User { get; set; }
+        public string User { get; set; }
         public int Score { get; set; }
+        public DateTime Date { get; set; }
+
+        public ScoreItem()
+        {
+            Date = DateTime.Now;
+        }
     }
 }
